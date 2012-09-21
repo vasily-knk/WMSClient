@@ -17,15 +17,18 @@ private:
 public:
     typedef typename list_t::const_iterator const_iterator;
     typedef typename list_t::iterator iterator;
+    typedef typename list_t::const_reverse_iterator const_reverse_iterator;
+    typedef typename list_t::reverse_iterator reverse_iterator;
+
 public:
-    bool exists(const key_type& key) const
+    bool contains(const key_type& key) const
     {
         return map_.count(key) != 0;
     }
 
     void add(const key_type &key, const value_type &value)
     {
-        if (exists(key))
+        if (contains(key))
         {
             // TODO: dublication
         }
@@ -48,6 +51,7 @@ public:
         return *it_ref;
     }
 
+public:
     const_iterator begin() const
     {
         return list_.begin();
@@ -68,6 +72,25 @@ public:
         return list_.end();
     }
 
+    const_reverse_iterator rbegin() const
+    {
+        return list_.rbegin();
+    }
+
+    const_reverse_iterator rend() const
+    {
+        return list_.rend();
+    }
+
+    reverse_iterator rbegin()
+    {
+        return list_.rbegin();
+    }
+
+    reverse_iterator rend()
+    {
+        return list_.rend();
+    }
 private:
     list_t list_;
     map_t map_;

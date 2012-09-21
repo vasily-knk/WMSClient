@@ -30,8 +30,9 @@ int main()
     for (int i = 0; i < 10; ++i)
         cache.add(i, i);
 
-    cache.request(10);
-    
+    if (cache.contains(5))
+        cache.request(5);
+
     BOOST_FOREACH(int i, cache)
         cout << i << endl;
     return 0;
