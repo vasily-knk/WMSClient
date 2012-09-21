@@ -27,7 +27,12 @@ struct my_alloc
 int main()
 {
     dumb_cache<int, int> cache;
-    cache.add(5, 5);
+    for (int i = 0; i < 10; ++i)
+        cache.add(i, i);
 
+    cache.request(10);
+    
+    BOOST_FOREACH(int i, cache)
+        cout << i << endl;
     return 0;
 }

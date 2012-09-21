@@ -14,7 +14,9 @@ private:
     typedef std::unordered_map<key_type, list_it_t> map_t;
     typedef typename map_t::iterator map_it_t;
 
-
+public:
+    typedef typename list_t::const_iterator const_iterator;
+    typedef typename list_t::iterator iterator;
 public:
     bool exists(const key_type& key) const
     {
@@ -44,6 +46,26 @@ public:
         list_.splice(list_.begin(), list_, it_ref);
         it_ref = list_.begin();
         return *it_ref;
+    }
+
+    const_iterator begin() const
+    {
+        return list_.begin();
+    }
+
+    const_iterator end() const
+    {
+        return list_.end();
+    }
+
+    iterator begin()
+    {
+        return list_.begin();
+    }
+
+    iterator end()
+    {
+        return list_.end();
     }
 
 private:
