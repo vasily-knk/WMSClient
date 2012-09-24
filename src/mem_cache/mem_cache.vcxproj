@@ -41,11 +41,13 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)out\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)out\$(Configuration)_$(Platform)\$(ProjectName)\</IntDir>
+    <IncludePath>C:\Work\svn\trunk\src\_Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)out\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)out\$(Configuration)_$(Platform)\$(ProjectName)\</IntDir>
+    <IncludePath>C:\Work\svn\trunk\src\_Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
