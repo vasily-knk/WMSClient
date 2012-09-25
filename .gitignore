@@ -1,4 +1,5 @@
 out/*
+data/*
 ipch/*
 *.sdf
 *.suo

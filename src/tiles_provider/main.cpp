@@ -1,8 +1,18 @@
 #include "stdafx.h"
 #include "tiles_provider.h"
 
-
 int main(int argc, char* argv[])
+{
+    tiles_provider provider;
+    shared_ptr<const tile_t> tile = provider.request_tile(tile_id_t(2, 1, 0));
+    while (!tile->ready())
+    {
+
+    }
+    return 0;
+}
+
+int amain(int argc, char* argv[])
 {
     typedef shared_ptr<const tile_t> tile_ptr_t;
     tiles_provider provider;
@@ -18,8 +28,12 @@ int main(int argc, char* argv[])
         return !(tile->ready());
     };
 
+    int counter = 0;
     while (std::count_if(tiles.begin(), tiles.end(), check_not_ready) != 0)
     {
+        boost::this_thread::sleep(boost::posix_time::seconds(1));
+        std::cout << "working " << std::endl;
+
         for (size_t i = 0; i < tiles.size(); ++i)
         {
             if (ready_bits[i])
@@ -31,6 +45,7 @@ int main(int argc, char* argv[])
                 ready_bits[i] = true;
             }
         }
+
     }
 
     return 0;

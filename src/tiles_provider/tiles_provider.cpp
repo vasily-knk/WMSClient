@@ -1,11 +1,13 @@
 #include "stdafx.h"
 #include "tiles_provider.h"
+#include "wms_tile_loader.h"
 
 tiles_provider::tiles_provider()
     : work_(asio_)
     , runner_thread_(boost::bind(&boost::asio::io_service::run, &asio_))
 {
-    loaders_.push_back(loader_ptr(new dummy_tile_loader(asio_)));
+    //loaders_.push_back(loader_ptr(new dummy_tile_loader(asio_)));
+    loaders_.push_back(loader_ptr(new wms_tile_loader(asio_)));
 }
 
 tiles_provider::~tiles_provider()

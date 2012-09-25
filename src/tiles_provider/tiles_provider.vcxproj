@@ -88,7 +88,10 @@
     <ClInclude Include="wms_tile_loader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="boost_example.cpp" />
+    <ClCompile Include="boost_example.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="dummy_tile_loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
