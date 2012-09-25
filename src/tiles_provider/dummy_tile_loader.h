@@ -5,7 +5,7 @@
 class dummy_tile_loader : public tile_loader
 {
 public:
-    dummy_tile_loader(boost::asio::io_service &io);
+    explicit dummy_tile_loader(boost::asio::io_service &io);
     shared_ptr<const tile_t> request_tile(const tile_id_t &id);
 
 private:

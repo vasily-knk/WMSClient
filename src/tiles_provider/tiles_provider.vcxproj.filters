@@ -33,6 +33,9 @@
     <ClInclude Include="tile_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="wms_tile_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -45,6 +48,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dummy_tile_loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wms_tile_loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boost_example.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

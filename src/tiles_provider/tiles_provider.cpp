@@ -24,4 +24,3 @@ shared_ptr<const tile_t> tiles_provider::request_tile(const tile_id_t &id)
     }
     return shared_ptr<const tile_t>();
 }
-

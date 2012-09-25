@@ -85,8 +85,10 @@
     <ClInclude Include="tile.h" />
     <ClInclude Include="tiles_provider.h" />
     <ClInclude Include="tile_loader.h" />
+    <ClInclude Include="wms_tile_loader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="boost_example.cpp" />
     <ClCompile Include="dummy_tile_loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -94,6 +96,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="tiles_provider.cpp" />
+    <ClCompile Include="wms_tile_loader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
