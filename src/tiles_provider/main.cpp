@@ -4,7 +4,7 @@
 int main(int argc, char* argv[])
 {
     tiles_provider provider;
-    shared_ptr<const tile_t> tile = provider.request_tile(tile_id_t(2, 1, 0));
+    shared_ptr<const tile_t> tile = provider.request_tile(tile_id_t(8, 127, 171));
     while (!tile->ready())
     {
 

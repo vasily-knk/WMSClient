@@ -67,8 +67,8 @@ string wms_tile_loader::request::get_path() const
     };
 
     ss << std::fixed;
-    ss << conv(tile_id_.x) << ",";
-    ss << conv(tile_id_.y) << ",";
+    ss << conv(tile_id_.x) + 1 << ",";
+    ss << conv(tile_id_.y) + 1 << ",";
     ss << conv(tile_id_.x + 1) << ",";
     ss << conv(tile_id_.y + 1);
 
