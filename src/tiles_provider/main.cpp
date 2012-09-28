@@ -1,25 +1,44 @@
 #include "stdafx.h"
 #include "tiles_provider.h"
+#include "common/performance_counter.h"
 
-int main(int argc, char* argv[])
+int amain(int argc, char* argv[])
 {
     tiles_provider provider;
+
+    PerformaceCounter perf_counter;
     shared_ptr<const tile_t> tile = provider.request_tile(tile_id_t(8, 127, 171));
     while (!tile->ready())
     {
 
     }
+    std::cout << "Time: " << perf_counter.time_ms() << std::endl;
     return 0;
 }
 
-int amain(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
     typedef shared_ptr<const tile_t> tile_ptr_t;
     tiles_provider provider;
-    vector<tile_ptr_t> tiles;
     
-    for (int i = 0; i < 10; ++i)
-        tiles.push_back(provider.request_tile(tile_id_t(0, 0, 0)));
+    const tile_id_t id(5, 4, 8);
+
+    std::cout << "Loading tile for the first time" << std::endl;
+
+    shared_ptr<const tile_t> tile = provider.request_tile(id);
+
+    while (!tile->ready())
+    {
+
+    }
+
+    std::cout << "Tile ready" << std::endl;
+    
+    vector<tile_ptr_t> tiles;
+    PerformaceCounter perf_counter;
+
+    for (int i = 0; i < 100; ++i)
+        tiles.push_back(provider.request_tile(id));
 
     vector<bool> ready_bits(tiles.size(), false);
 
@@ -31,9 +50,6 @@ int amain(int argc, char* argv[])
     int counter = 0;
     while (std::count_if(tiles.begin(), tiles.end(), check_not_ready) != 0)
     {
-        boost::this_thread::sleep(boost::posix_time::seconds(1));
-        std::cout << "working " << std::endl;
-
         for (size_t i = 0; i < tiles.size(); ++i)
         {
             if (ready_bits[i])
@@ -41,12 +57,12 @@ int amain(int argc, char* argv[])
 
             if (tiles[i]->ready())
             {
-                std::cout << "Tile " << i << " ready" << std::endl;
+                //std::cout << "Tile " << i << " ready" << std::endl;
                 ready_bits[i] = true;
             }
         }
-
     }
+    std::cout << "Avg time: " << perf_counter.time_ms() / tiles.size() << std::endl;
 
     return 0;
 }

@@ -12,9 +12,10 @@ public:
 
 private:
     class request;
-    void tile_ready(shared_ptr<request>);
+    void tile_ready(list<shared_ptr<request>>::iterator it);
 
 private:
     boost::asio::io_service *io_;
+    list<shared_ptr<request>> requests_;
 };
 

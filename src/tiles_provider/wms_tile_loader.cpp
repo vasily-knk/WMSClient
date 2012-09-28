@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "wms_tile_loader.h"
+#include "common/performance_counter.h"
+#include "png_converter.h"
 
 /************************************************************************/
 /* request                                                              */
@@ -12,6 +14,8 @@ class wms_tile_loader::request
 {
 public:
     request(const tile_id_t &id, shared_ptr<tile_t> tile, boost::asio::io_service &io);
+    ~request();
+
     void load_tile(tile_ready_callback_t final_callback);
 
 private:
@@ -40,8 +44,7 @@ private:
     tcp::socket socket_;
     boost::asio::streambuf request_;
     boost::asio::streambuf response_;
-
-    ofstream output_;
+    vector<char> buffer_;
 };
 
 wms_tile_loader::request::request(const tile_id_t &id, shared_ptr<tile_t> tile, boost::asio::io_service &io)
@@ -50,9 +53,8 @@ wms_tile_loader::request::request(const tile_id_t &id, shared_ptr<tile_t> tile, 
     , io_(&io)
     , resolver_(io)
     , socket_(io)
-    , output_("output.png", std::ios_base::out | std::ios_base::binary)
 {
-        
+    buffer_.reserve(100 * 1024);
 }
 
 string wms_tile_loader::request::get_path() const
@@ -75,16 +77,6 @@ string wms_tile_loader::request::get_path() const
     return ss.str();
 }
 
-void wms_tile_loader::request::error(const boost::system::error_code& err)
-{
-    error(err.message());
-}
-
-void wms_tile_loader::request::error(const string& message)
-{
-    std::cerr << "WMS loader error: " << message << std::endl;
-}
-
 void wms_tile_loader::request::load_tile(tile_ready_callback_t final_callback)
 {
     final_callback_ = final_callback;
@@ -96,7 +88,7 @@ void wms_tile_loader::request::load_tile(tile_ready_callback_t final_callback)
     // allow us to treat all data up until the EOF as the content.
     
     const string coord = get_path();
-    std::cout << "Coord: " << coord << std::endl;
+    //std::cout << "Coord: " << coord << std::endl;
     
     std::ostream request_stream(&request_);
     request_stream << "GET ";
@@ -122,7 +114,7 @@ void wms_tile_loader::request::handle_resolve(const boost::system::error_code& e
         error(err);
         return;
     }
-    
+
     auto callback = boost::bind(&wms_tile_loader::request::handle_connect, this, boost::asio::placeholders::error);
     boost::asio::async_connect(socket_, endpoint_iterator, callback);
 }
@@ -201,6 +193,7 @@ void wms_tile_loader::request::handle_read_headers(const boost::system::error_co
     {
     }
 
+
     // Write whatever content we already have to output.
     if (response_.size() > 0)
         process_response();
@@ -234,15 +227,40 @@ void wms_tile_loader::request::handle_read_content(const boost::system::error_co
 
 void wms_tile_loader::request::process_response()
 {
-    output_ << &response_;
+    std::istreambuf_iterator<char> src(&response_);
+    std::istreambuf_iterator<char> eos;
+    
+    std::copy(src, eos, std::back_inserter(buffer_));
 }
 
 void wms_tile_loader::request::tile_ready()
 {
+    png_converter converter = get_png_converter();
+    unsigned char* src = reinterpret_cast<unsigned char*>(&(buffer_[0]));
+    unsigned char* dst = tile_->get_data();
+    converter(src, dst, buffer_.size(), tile_t::WIDTH, tile_t::HEIGHT);
     tile_->set_ready(true);
     final_callback_();
 }
 
+void wms_tile_loader::request::error(const boost::system::error_code& err)
+{
+    error(err.message());
+}
+
+void wms_tile_loader::request::error(const string& message)
+{
+    std::cerr << "WMS loader error: " << message << std::endl;
+
+    tile_->set_ready(true);
+    if (final_callback_ != NULL)
+        final_callback_();
+}
+
+wms_tile_loader::request::~request()
+{
+    
+}
 
 
 
@@ -260,14 +278,16 @@ shared_ptr<const tile_t> wms_tile_loader::request_tile(const tile_id_t &id)
 {
     shared_ptr<tile_t> tile(new tile_t);
 
-    shared_ptr<request> request(new request(id, tile, *io_));
-    auto callback = boost::bind(&wms_tile_loader::tile_ready, this, request);
-    request->load_tile(callback);
+    shared_ptr<request> r(new request(id, tile, *io_));
+    requests_.push_front(r);
+
+    auto callback = boost::bind(&wms_tile_loader::tile_ready, this, requests_.begin());
+    r->load_tile(callback);
 
     return tile;
 }
 
-void wms_tile_loader::tile_ready(shared_ptr<request>)
+void wms_tile_loader::tile_ready(list<shared_ptr<request>>::iterator it)
 {
-
+    requests_.erase(it);
 }

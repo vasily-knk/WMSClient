@@ -25,12 +25,19 @@ public:
     friend class tiles_provider;
 
 public:
-    explicit tile_t()
+    tile_t()
         : data_(new data_ptr_t[WIDTH * HEIGHT * BYTES_PER_PIXEL])
         , ready_(false)
     {
-
+        ++num_tiles_;
     }
+    
+    ~tile_t()
+    {
+        --num_tiles_;
+    }
+private:
+    tile_t(const tile_t&);
 
 public:
     data_ptr_t *get_data() const
@@ -50,8 +57,15 @@ public:
         ready_ = value;
     }
 
+public:
+    static size_t get_num_tiles() 
+    {
+        return num_tiles_;
+    }
 private:
     scoped_array<data_ptr_t> data_;
     bool ready_;
     mutable boost::mutex mutex_;
+    
+    static size_t num_tiles_;
 };

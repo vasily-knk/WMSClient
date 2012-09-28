@@ -2,6 +2,8 @@
 #include "tiles_provider.h"
 #include "wms_tile_loader.h"
 
+size_t tile_t::num_tiles_ = 0;
+
 tiles_provider::tiles_provider()
     : work_(asio_)
     , runner_thread_(boost::bind(&boost::asio::io_service::run, &asio_))

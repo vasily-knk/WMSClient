@@ -1,12 +1,7 @@
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but
-// are changed infrequently
-//
-
 #pragma once
 
-#include "targetver.h"
-
+#define _WIN32_WINNT 0x0501
+#define __WIN32
 
 #include "common/stl.h"
 #include "common/boost.h"
@@ -18,3 +13,6 @@
 
 using std::cout;
 using std::endl;
+
+#include <QtGui>
+
