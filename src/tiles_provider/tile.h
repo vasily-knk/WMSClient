@@ -10,8 +10,19 @@ struct tile_id_t
 
     }
 
+    bool operator==(const tile_id_t &other) const
+    {
+        return (zoom == other.zoom && x == other.x && y == other.y);
+    }
+
+    static size_t hash()
+    {
+        return 0;
+    }
+
     int zoom, x, y;
 };
+
 
 class tile_t
 {

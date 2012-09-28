@@ -80,6 +80,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="dummy_tile_loader.h" />
+    <ClInclude Include="png_cache.h" />
     <ClInclude Include="png_converter.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />

@@ -17,6 +17,10 @@ public:
     ~request();
 
     void load_tile(tile_ready_callback_t final_callback);
+    shared_ptr<const tile_t> get_tile() const
+    {
+        return tile_;
+    }
 
 private:
     string get_path() const;
@@ -32,6 +36,7 @@ private:
 
     void process_response();
     void tile_ready();
+
 
 private:
     tile_id_t tile_id_;
@@ -270,24 +275,31 @@ wms_tile_loader::request::~request()
 
 wms_tile_loader::wms_tile_loader(boost::asio::io_service &io)
     : io_(&io)
+    , cache_(NULL)
 {
 
 }
 
 shared_ptr<const tile_t> wms_tile_loader::request_tile(const tile_id_t &id)
 {
+    auto it = requests_.find(id);
+    if (it != requests_.end())
+    {
+        return it->second->get_tile();
+    }
+    
     shared_ptr<tile_t> tile(new tile_t);
 
     shared_ptr<request> r(new request(id, tile, *io_));
-    requests_.push_front(r);
+    requests_[id] = r;
 
-    auto callback = boost::bind(&wms_tile_loader::tile_ready, this, requests_.begin());
+    auto callback = boost::bind(&wms_tile_loader::tile_ready, this, id);
     r->load_tile(callback);
 
     return tile;
 }
 
-void wms_tile_loader::tile_ready(list<shared_ptr<request>>::iterator it)
+void wms_tile_loader::tile_ready(const tile_id_t &id)
 {
-    requests_.erase(it);
+    requests_.erase(id);
 }
