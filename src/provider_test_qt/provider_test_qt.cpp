@@ -3,6 +3,7 @@
 
 provider_test_qt::provider_test_qt(QWidget *parent, Qt::WFlags flags)
     : QWidget(parent, flags)
+    , provider_("192.168.121.129")
     , zoom_(0)
     , x_(0)
     , y_(0)

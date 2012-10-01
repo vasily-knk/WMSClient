@@ -6,7 +6,7 @@
 class wms_tile_loader : public tile_loader
 {
 public:
-    explicit wms_tile_loader(boost::asio::io_service &io);
+    explicit wms_tile_loader(boost::asio::io_service &io, const string &host);
     void set_png_cache(png_cache *cache);
 
 public:
@@ -17,6 +17,7 @@ private:
     void tile_ready(const tile_id_t &id);
 
 private:
+    const string host_;
     boost::asio::io_service *io_;
 
     typedef unordered_map<tile_id_t, shared_ptr<request>> requests_map_t;

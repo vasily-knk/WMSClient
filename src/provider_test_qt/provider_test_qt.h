@@ -1,7 +1,7 @@
 #ifndef PROVIDER_TEST_QT_H
 #define PROVIDER_TEST_QT_H
 
-#include "../tiles_provider/tiles_provider.h"
+#include "../tiles_provider/tile_provider2.h"
 
 class provider_test_qt : public QWidget
 {
@@ -21,7 +21,7 @@ protected slots:
 private:
     void updateTile();
 private:
-    tiles_provider provider_;
+    tile_provider2 provider_;
     shared_ptr<const tile_t> tile_;
 
     int zoom_, x_, y_;

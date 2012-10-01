@@ -6,7 +6,7 @@
 class tiles_provider : public tile_loader
 {
 public:
-    tiles_provider();
+    tiles_provider(const string &wms_host);
     ~tiles_provider();
 
     shared_ptr<const tile_t> request_tile(const tile_id_t &id);

@@ -15,14 +15,20 @@ struct tile_id_t
         return (zoom == other.zoom && x == other.x && y == other.y);
     }
 
-    static size_t hash()
-    {
-        return 0;
-    }
-
     int zoom, x, y;
 };
 
+namespace boost
+{
+    inline size_t hash_value(const tile_id_t &id)
+    {
+        size_t seed = 0;
+        hash_combine(seed, id.zoom);
+        hash_combine(seed, id.x);
+        hash_combine(seed, id.y);
+        return seed;
+    }
+}
 
 class tile_t
 {
@@ -80,3 +86,26 @@ private:
     
     static size_t num_tiles_;
 };
+
+typedef vector<unsigned char> png_t;
+/*
+class png_t
+{
+public:
+    const unsigned char* get_data() const
+    {
+        return &(buffer_[0]);
+    }
+
+    unsigned char* get_data()
+    {
+        return &(buffer_[0]);
+    }
+
+    size_t get_size() const
+    {
+        return buffer_.size();
+    }
+private:
+    vector<unsigned char> buffer_;
+};*/

@@ -13,7 +13,7 @@ using boost::asio::ip::tcp;
 class wms_tile_loader::request
 {
 public:
-    request(const tile_id_t &id, shared_ptr<tile_t> tile, boost::asio::io_service &io);
+    request(const tile_id_t &id, shared_ptr<tile_t> tile, boost::asio::io_service &io, const string &host);
     ~request();
 
     void load_tile(tile_ready_callback_t final_callback);
@@ -39,6 +39,7 @@ private:
 
 
 private:
+    const string host_;
     tile_id_t tile_id_;
     shared_ptr<tile_t> tile_;
     boost::asio::io_service *io_;
@@ -49,11 +50,13 @@ private:
     tcp::socket socket_;
     boost::asio::streambuf request_;
     boost::asio::streambuf response_;
-    vector<char> buffer_;
+    png_t buffer_;
+
 };
 
-wms_tile_loader::request::request(const tile_id_t &id, shared_ptr<tile_t> tile, boost::asio::io_service &io)
-    : tile_id_(id)
+wms_tile_loader::request::request(const tile_id_t &id, shared_ptr<tile_t> tile, boost::asio::io_service &io, const string &host)
+    : host_(host)
+    , tile_id_(id)
     , tile_(tile)
     , io_(&io)
     , resolver_(io)
@@ -66,6 +69,7 @@ string wms_tile_loader::request::get_path() const
 {
     std::stringstream ss;
     const double a = 20037508.3427892430765884088807;
+    const double epsilon = 1;
     const double stride = a * 2.0 / pow(2.0, tile_id_.zoom);
 
     auto conv = [&](const int pos) -> double
@@ -74,8 +78,8 @@ string wms_tile_loader::request::get_path() const
     };
 
     ss << std::fixed;
-    ss << conv(tile_id_.x) + 1 << ",";
-    ss << conv(tile_id_.y) + 1 << ",";
+    ss << conv(tile_id_.x) + epsilon << ",";
+    ss << conv(tile_id_.y) + epsilon << ",";
     ss << conv(tile_id_.x + 1) << ",";
     ss << conv(tile_id_.y + 1);
 
@@ -86,8 +90,6 @@ void wms_tile_loader::request::load_tile(tile_ready_callback_t final_callback)
 {
     final_callback_ = final_callback;
 
-    const string server("192.168.121.129");
-    
     // Form the request. We specify the "Connection: close" header so that the
     // server will close the socket after transmitting the response. This will
     // allow us to treat all data up until the EOF as the content.
@@ -100,7 +102,7 @@ void wms_tile_loader::request::load_tile(tile_ready_callback_t final_callback)
     request_stream << "/cgi-bin/tilecache.cgi?LAYERS=osm&SERVICE=mapnik&VERSION=1.1.1&REQUEST=GetMap&BBOX=";
     request_stream << coord;
     request_stream << " HTTP/1.0\r\n";
-    request_stream << "Host: " << server << "\r\n";
+    request_stream << "Host: " << host_ << "\r\n";
     request_stream << "Accept: */*\r\n";
     request_stream << "Connection: close\r\n\r\n";
 
@@ -108,7 +110,7 @@ void wms_tile_loader::request::load_tile(tile_ready_callback_t final_callback)
     // into a list of endpoints.
     auto callback = boost::bind(&wms_tile_loader::request::handle_resolve, this, boost::asio::placeholders::error, boost::asio::placeholders::iterator);
     
-    tcp::resolver::query query(server, "http");
+    tcp::resolver::query query(host_, "http");
     resolver_.async_resolve(query, callback);
 }
 
@@ -273,8 +275,9 @@ wms_tile_loader::request::~request()
 /* wms_tile_loader                                                      */
 /************************************************************************/
 
-wms_tile_loader::wms_tile_loader(boost::asio::io_service &io)
-    : io_(&io)
+wms_tile_loader::wms_tile_loader(boost::asio::io_service &io, const string &host)
+    : host_(host)
+    , io_(&io)
     , cache_(NULL)
 {
 
@@ -284,13 +287,11 @@ shared_ptr<const tile_t> wms_tile_loader::request_tile(const tile_id_t &id)
 {
     auto it = requests_.find(id);
     if (it != requests_.end())
-    {
         return it->second->get_tile();
-    }
     
     shared_ptr<tile_t> tile(new tile_t);
 
-    shared_ptr<request> r(new request(id, tile, *io_));
+    shared_ptr<request> r(new request(id, tile, *io_, host_));
     requests_[id] = r;
 
     auto callback = boost::bind(&wms_tile_loader::tile_ready, this, id);

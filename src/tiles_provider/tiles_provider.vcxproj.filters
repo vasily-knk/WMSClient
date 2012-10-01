@@ -42,6 +42,15 @@
     <ClInclude Include="png_cache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="png_provider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tile_provider2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wms_png_provider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -57,6 +66,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="wms_tile_loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tile_provider2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wms_png_provider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
