@@ -33,13 +33,16 @@
     <ClInclude Include="png_provider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tile_provider2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="wms_png_provider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dummy_cache.h">
+    <ClInclude Include="tile_provider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dumb_cache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lru_cache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,13 +53,13 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tile_provider2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="wms_png_provider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dummy_cache.cpp">
+    <ClCompile Include="tile_provider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lru_cache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

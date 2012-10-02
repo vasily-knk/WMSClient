@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "provider_test_qt.h"
-#include "../tiles_provider/dummy_cache.h"
+#include "../tiles_provider/lru_cache.h"
 #include "../tiles_provider/wms_png_provider.h"
 
 provider_test_qt::provider_test_qt(QWidget *parent, Qt::WFlags flags)
@@ -11,12 +11,16 @@ provider_test_qt::provider_test_qt(QWidget *parent, Qt::WFlags flags)
 
     , timer_(new QTimer(this))
     , tile_requested_(false)
+
+    , cache_(new lru_cache(10))
 {
-    shared_ptr<dummy_cache> cache(new dummy_cache);
     shared_ptr<wms_png_provider> wms(new wms_png_provider(provider_.io_service(), "192.168.121.129"));
 
-    provider_.add_provider(cache);
-    provider_.add_provider(wms, cache);
+    provider_.add_provider(cache_);
+    provider_.add_provider(wms, cache_);
+    
+
+    initInterface();
 
     updateTile();
 
@@ -29,6 +33,7 @@ provider_test_qt::~provider_test_qt()
 
 }
 
+/*
 void provider_test_qt::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
@@ -53,6 +58,7 @@ void provider_test_qt::paintEvent(QPaintEvent *event)
     QString str = QString::number(zoom_) + " (" + QString::number(x_) + ", " + QString::number(y_) + ")";
     painter.drawText(0, 256, str);
 }
+*/
 
 void provider_test_qt::keyPressEvent(QKeyEvent *event)
 {
@@ -117,8 +123,16 @@ void provider_test_qt::updateTile()
     
     const size_t uses = tile_.use_count();
 
-    tile_ = provider_.request_tile(tile_id_t(zoom_, x_, y_));
+    tile_id_t id (zoom_, x_, y_);
+    tile_ = provider_.request_tile(id);
     tile_requested_ = true;
+    location_->setText(tileIdToString(id));
+
+    QStringList string_list;
+    for (auto it = cache_->get_map().get_map().begin(); it != cache_->get_map().get_map().end(); ++it)
+        string_list.push_back(tileIdToString(it->first));
+
+    list_model_.setStringList(string_list);
 
     qDebug() << "Tiles: " << tile_t::get_num_tiles();
 }
@@ -127,8 +141,56 @@ void provider_test_qt::timerTick()
 {
     if (tile_requested_ && tile_->ready())
     {
+        updateImage();
+        
         update();
         setWindowTitle("Done.");
         tile_requested_ = false;
     }
+}
+
+void provider_test_qt::initInterface()
+{
+    QGridLayout *layout = new QGridLayout;
+    
+    screen_ = new QLabel(this);
+    //screen_->setPixmap(QPixmap(tile_t::WIDTH, tile_t::HEIGHT));
+    layout->addWidget(screen_, 0, 0);
+
+    location_ = new QLabel(this);
+    layout->addWidget(location_, 1, 0);
+
+    cache_list_ = new QListView(this);
+    cache_list_->setModel(&list_model_);
+    cache_list_->setFocusPolicy(Qt::NoFocus);
+
+    layout->addWidget(cache_list_, 0, 1, 2, 1);
+
+    setLayout(layout);
+}
+
+void provider_test_qt::updateImage()
+{
+    QImage img(tile_t::WIDTH, tile_t::HEIGHT, QImage::Format_ARGB32_Premultiplied);
+
+    unsigned char* ptr = tile_->get_data();
+    for (size_t y = 0; y < tile_t::HEIGHT; ++y)
+    {
+        for (size_t x = 0; x < tile_t::WIDTH; ++x)
+        {
+            const QRgb rgb = qRgb(ptr[0], ptr[1], ptr[2]);
+            img.setPixel(x, y, rgb);
+            ptr += 3;
+        }
+    }
+
+    QPixmap pixmap;
+    pixmap.convertFromImage(img);
+
+    screen_->setPixmap(pixmap);
+}
+
+QString provider_test_qt::tileIdToString(const tile_id_t &id)
+{
+    return QString::number(id.zoom) + " (" + QString::number(id.x) + ", " + QString::number(id.y) + ")";
 }
