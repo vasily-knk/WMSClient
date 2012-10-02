@@ -1,23 +1,22 @@
 #include "stdafx.h"
 #include "tile_provider2.h"
-#include "dummy_cache.h"
-#include "wms_png_provider.h"
-#include "png_converter.h"
 
 size_t tile_t::num_tiles_ = 0;
 
 
-tile_provider2::tile_provider2(const string &wms_host)
+tile_provider2::tile_provider2()
     : work_(asio_)
     , runner_thread_(boost::bind(&boost::asio::io_service::run, &asio_))
     , converter_(::get_png_converter())
 {
+/*
     shared_ptr<dummy_cache> cache(new dummy_cache);
     
     loaders_.push_back(cache);
     loaders_.push_back(shared_ptr<png_provider>(new wms_png_provider(asio_, wms_host)));
 
     png_cache_ = cache;
+*/
 }
 
 tile_provider2::~tile_provider2()
@@ -42,20 +41,23 @@ shared_ptr<const tile_t> tile_provider2::request_tile(const tile_id_t &id)
         tiles_in_progress_[id] = tile;
     }
 
-    auto callback = boost::bind(&tile_provider2::png_ready_callback, this, id, tile, _1);
 
-    BOOST_FOREACH(const png_provider_ptr &p, loaders_)
+    BOOST_FOREACH(const provider_cache_pair &p, loaders_)
     {
-        if (p->request_png(id, callback))
+        auto callback = boost::bind(&tile_provider2::png_ready_callback, this, id, tile, _1, p.second);
+        
+        if (p.first->request_png(id, callback))
             break;
     }
 
     return tile;
 }
 
-void tile_provider2::png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> tile, shared_ptr<const png_t> png)
+void tile_provider2::png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> tile, shared_ptr<const png_t> png, shared_ptr<png_cache> cache)
 {
-    png_cache_->cache_png(id, png);
+    if (cache)
+        cache->cache_png(id, png);
+
     converter_(&(png->at(0)), tile->get_data(), png->size(), tile_t::WIDTH, tile_t::HEIGHT);
 
     // tiles_in_progress_ critical section
@@ -65,5 +67,16 @@ void tile_provider2::png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> 
     }
 
     tile->set_ready(true);
+}
+
+void tile_provider2::add_provider(shared_ptr<png_provider> provider, shared_ptr<png_cache> cache)
+{
+    loaders_.push_back(make_pair(provider, cache));
+}
+
+void tile_provider2::add_provider(shared_ptr<png_provider> provider)
+{
+    shared_ptr<png_cache> cache;
+    add_provider(provider, cache);
 }
 

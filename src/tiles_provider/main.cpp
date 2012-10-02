@@ -4,7 +4,7 @@
 
 int amain(int argc, char* argv[])
 {
-    tile_provider2 provider("192.168.121.129");
+    tile_provider2 provider;
 
     PerformaceCounter perf_counter;
     shared_ptr<const tile_t> tile = provider.request_tile(tile_id_t(8, 127, 171));
@@ -19,7 +19,7 @@ int amain(int argc, char* argv[])
 int main(int argc, char* argv[])
 {
     typedef shared_ptr<const tile_t> tile_ptr_t;
-    tile_provider2 provider("192.168.121.129");
+    tile_provider2 provider;
     
     const tile_id_t id(5, 4, 8);
 

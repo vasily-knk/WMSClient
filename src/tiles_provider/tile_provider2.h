@@ -7,21 +7,30 @@
 class tile_provider2
 {
 public:
-    tile_provider2(const string &wms_host);
+    typedef pair<shared_ptr<png_provider>, shared_ptr<png_cache>> provider_cache_pair;
+public:
+    tile_provider2();
     ~tile_provider2();
 
     shared_ptr<const tile_t> request_tile(const tile_id_t &id);
 
+    void add_provider(shared_ptr<png_provider> provider, shared_ptr<png_cache> cache);
+    void add_provider(shared_ptr<png_provider> provider);
+
+    boost::asio::io_service &io_service() 
+    {
+        return asio_;
+    }
+
 private:
-    void png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> tile, shared_ptr<const png_t> png);
+    void png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> tile, shared_ptr<const png_t> png, shared_ptr<png_cache> cache);
 
 private:
     boost::asio::io_service asio_;
     boost::asio::io_service::work work_;
     boost::thread runner_thread_;
 
-    typedef shared_ptr<png_provider> png_provider_ptr;
-    list<png_provider_ptr> loaders_;
+    list<provider_cache_pair> loaders_;
     shared_ptr<png_cache> png_cache_;
     png_converter converter_;
     

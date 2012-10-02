@@ -89,24 +89,3 @@ private:
 };
 
 typedef vector<unsigned char> png_t;
-/*
-class png_t
-{
-public:
-    const unsigned char* get_data() const
-    {
-        return &(buffer_[0]);
-    }
-
-    unsigned char* get_data()
-    {
-        return &(buffer_[0]);
-    }
-
-    size_t get_size() const
-    {
-        return buffer_.size();
-    }
-private:
-    vector<unsigned char> buffer_;
-};*/

@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "provider_test_qt.h"
+#include "../tiles_provider/dummy_cache.h"
+#include "../tiles_provider/wms_png_provider.h"
 
 provider_test_qt::provider_test_qt(QWidget *parent, Qt::WFlags flags)
     : QWidget(parent, flags)
-    , provider_("192.168.121.129")
     , zoom_(0)
     , x_(0)
     , y_(0)
@@ -11,6 +12,12 @@ provider_test_qt::provider_test_qt(QWidget *parent, Qt::WFlags flags)
     , timer_(new QTimer(this))
     , tile_requested_(false)
 {
+    shared_ptr<dummy_cache> cache(new dummy_cache);
+    shared_ptr<wms_png_provider> wms(new wms_png_provider(provider_.io_service(), "192.168.121.129"));
+
+    provider_.add_provider(cache);
+    provider_.add_provider(wms, cache);
+
     updateTile();
 
     connect(timer_, SIGNAL(timeout()), this, SLOT(timerTick()));
