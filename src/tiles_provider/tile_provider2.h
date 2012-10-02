@@ -1,6 +1,7 @@
 #pragma once
 
 #include "png_provider.h"
+#include "png_cache.h"
 #include "png_converter.h"
 
 class tile_provider2
@@ -21,6 +22,7 @@ private:
 
     typedef shared_ptr<png_provider> png_provider_ptr;
     list<png_provider_ptr> loaders_;
+    shared_ptr<png_cache> png_cache_;
     png_converter converter_;
     
     unordered_map<tile_id_t, shared_ptr<const tile_t>> tiles_in_progress_;

@@ -39,6 +39,9 @@
     <ClInclude Include="wms_png_provider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="dummy_cache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -52,6 +55,9 @@
     </ClCompile>
     <ClCompile Include="wms_png_provider.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dummy_cache.cpp">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

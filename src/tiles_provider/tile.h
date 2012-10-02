@@ -85,6 +85,7 @@ private:
     mutable boost::mutex mutex_;
     
     static size_t num_tiles_;
+
 };
 
 typedef vector<unsigned char> png_t;

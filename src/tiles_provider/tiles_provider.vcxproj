@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="dummy_cache.h" />
     <ClInclude Include="png_cache.h" />
     <ClInclude Include="png_converter.h" />
     <ClInclude Include="png_provider.h" />
@@ -89,6 +90,7 @@
     <ClInclude Include="wms_png_provider.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="dummy_cache.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

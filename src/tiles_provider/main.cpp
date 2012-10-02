@@ -18,8 +18,6 @@ int amain(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
-    
-    
     typedef shared_ptr<const tile_t> tile_ptr_t;
     tile_provider2 provider("192.168.121.129");
     

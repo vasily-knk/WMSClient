@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "tile_provider2.h"
+#include "dummy_cache.h"
 #include "wms_png_provider.h"
 #include "png_converter.h"
 
@@ -11,7 +12,12 @@ tile_provider2::tile_provider2(const string &wms_host)
     , runner_thread_(boost::bind(&boost::asio::io_service::run, &asio_))
     , converter_(::get_png_converter())
 {
+    shared_ptr<dummy_cache> cache(new dummy_cache);
+    
+    loaders_.push_back(cache);
     loaders_.push_back(shared_ptr<png_provider>(new wms_png_provider(asio_, wms_host)));
+
+    png_cache_ = cache;
 }
 
 tile_provider2::~tile_provider2()
@@ -49,6 +55,7 @@ shared_ptr<const tile_t> tile_provider2::request_tile(const tile_id_t &id)
 
 void tile_provider2::png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> tile, shared_ptr<const png_t> png)
 {
+    png_cache_->cache_png(id, png);
     converter_(&(png->at(0)), tile->get_data(), png->size(), tile_t::WIDTH, tile_t::HEIGHT);
 
     // tiles_in_progress_ critical section
