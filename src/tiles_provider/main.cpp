@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "tiles_provider.h"
+#include "tile_provider2.h"
 #include "common/performance_counter.h"
 
 int amain(int argc, char* argv[])
 {
-    tiles_provider provider("192.168.121.129");
+    tile_provider2 provider("192.168.121.129");
 
     PerformaceCounter perf_counter;
     shared_ptr<const tile_t> tile = provider.request_tile(tile_id_t(8, 127, 171));
@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
     
     
     typedef shared_ptr<const tile_t> tile_ptr_t;
-    tiles_provider provider("192.168.121.129");
+    tile_provider2 provider("192.168.121.129");
     
     const tile_id_t id(5, 4, 8);
 

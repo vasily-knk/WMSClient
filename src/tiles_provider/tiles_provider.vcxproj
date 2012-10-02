@@ -79,30 +79,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="dummy_tile_loader.h" />
     <ClInclude Include="png_cache.h" />
     <ClInclude Include="png_converter.h" />
     <ClInclude Include="png_provider.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="tile.h" />
-    <ClInclude Include="tiles_provider.h" />
-    <ClInclude Include="tile_loader.h" />
     <ClInclude Include="tile_provider2.h" />
     <ClInclude Include="wms_png_provider.h" />
-    <ClInclude Include="wms_tile_loader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dummy_tile_loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="tiles_provider.cpp" />
     <ClCompile Include="tile_provider2.cpp" />
     <ClCompile Include="wms_png_provider.cpp" />
-    <ClCompile Include="wms_tile_loader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

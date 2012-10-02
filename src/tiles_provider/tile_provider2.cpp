@@ -3,6 +3,9 @@
 #include "wms_png_provider.h"
 #include "png_converter.h"
 
+size_t tile_t::num_tiles_ = 0;
+
+
 tile_provider2::tile_provider2(const string &wms_host)
     : work_(asio_)
     , runner_thread_(boost::bind(&boost::asio::io_service::run, &asio_))
@@ -46,7 +49,7 @@ shared_ptr<const tile_t> tile_provider2::request_tile(const tile_id_t &id)
 
 void tile_provider2::png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> tile, shared_ptr<const png_t> png)
 {
-    //converter_(&(png->at(0)), tile->get_data(), png->size(), tile_t::WIDTH, tile_t::HEIGHT);
+    converter_(&(png->at(0)), tile->get_data(), png->size(), tile_t::WIDTH, tile_t::HEIGHT);
 
     // tiles_in_progress_ critical section
     {
@@ -54,5 +57,6 @@ void tile_provider2::png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> 
         tiles_in_progress_.erase(id);
     }
 
+    tile->set_ready(true);
 }
 

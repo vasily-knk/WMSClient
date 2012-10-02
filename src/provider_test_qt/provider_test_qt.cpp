@@ -24,10 +24,10 @@ provider_test_qt::~provider_test_qt()
 
 void provider_test_qt::paintEvent(QPaintEvent *event)
 {
+    QPainter painter(this);
     if (tile_ && tile_->ready())
     {
         QImage img(tile_t::WIDTH, tile_t::HEIGHT, QImage::Format_ARGB32_Premultiplied);
-        QPainter painter(this);
 
         unsigned char* ptr = tile_->get_data();
         for (size_t y = 0; y < tile_t::HEIGHT; ++y)
@@ -42,6 +42,9 @@ void provider_test_qt::paintEvent(QPaintEvent *event)
 
         painter.drawImage(QPointF(0, 0), img);
     }
+
+    QString str = QString::number(zoom_) + " (" + QString::number(x_) + ", " + QString::number(y_) + ")";
+    painter.drawText(0, 256, str);
 }
 
 void provider_test_qt::keyPressEvent(QKeyEvent *event)

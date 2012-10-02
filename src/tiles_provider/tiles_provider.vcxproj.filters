@@ -21,19 +21,7 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tiles_provider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="tile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dummy_tile_loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tile_loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="wms_tile_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="png_converter.h">
@@ -56,16 +44,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tiles_provider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dummy_tile_loader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="wms_tile_loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tile_provider2.cpp">

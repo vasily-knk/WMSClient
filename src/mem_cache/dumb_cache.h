@@ -31,6 +31,7 @@ public:
         if (contains(key))
         {
             // TODO: dublication
+            throw std::runtime_error("dumb_cache key dublication");
         }
         list_.push_front(value);
         map_.insert(map_t::value_type(key, list_.begin()));        
