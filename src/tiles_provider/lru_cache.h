@@ -2,14 +2,14 @@
 
 #include "png_cache.h"
 #include "png_provider.h"
-#include "dumb_cache.h"
+#include "lru_map.h"
 
 class lru_cache : public png_cache, public png_provider
 {
 public:
-    typedef dumb_cache<tile_id_t, shared_ptr<const png_t>> png_map_t;
+    typedef lru_map<tile_id_t, shared_ptr<const png_t>> png_map_t;
 
-    lru_cache(size_t max_size);
+    lru_cache(size_t lower, size_t upper);
 
     void cache_png(const tile_id_t &id, shared_ptr<const png_t> png); 
     bool request_png(const tile_id_t &id, const png_callback &callback);
@@ -25,8 +25,8 @@ public:
     }
 
 private:
+    const size_t lower_, upper_;
     png_map_t map_;    
     boost::mutex mutex_;
-    const size_t max_size_;
     size_t size_;
 };

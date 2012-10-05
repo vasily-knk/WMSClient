@@ -12,7 +12,7 @@ provider_test_qt::provider_test_qt(QWidget *parent, Qt::WFlags flags)
     , timer_(new QTimer(this))
     , tile_requested_(false)
 
-    , cache_(new lru_cache(10))
+    , cache_(new lru_cache(5, 10))
 {
     shared_ptr<wms_png_provider> wms(new wms_png_provider(provider_.io_service(), "192.168.121.129"));
 
@@ -129,8 +129,9 @@ void provider_test_qt::updateTile()
     location_->setText(tileIdToString(id));
 
     QStringList string_list;
-    for (auto it = cache_->get_map().get_map().begin(); it != cache_->get_map().get_map().end(); ++it)
-        string_list.push_back(tileIdToString(it->first));
+    //for (auto it = cache_->get_map().get_map().begin(); it != cache_->get_map().get_map().end(); ++it)
+    BOOST_FOREACH(auto &v, cache_->get_map())
+        string_list.push_back(tileIdToString(v.first));
 
     list_model_.setStringList(string_list);
 

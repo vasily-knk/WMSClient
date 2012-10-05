@@ -39,10 +39,10 @@
     <ClInclude Include="tile_provider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dumb_cache.h">
+    <ClInclude Include="lru_cache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lru_cache.h">
+    <ClInclude Include="lru_map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

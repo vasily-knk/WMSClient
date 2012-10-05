@@ -20,6 +20,8 @@ public:
     typedef typename list_t::iterator iterator;
     typedef typename list_t::const_reverse_iterator const_reverse_iterator;
     typedef typename list_t::reverse_iterator reverse_iterator;
+    typedef value_type &reference;
+    typedef const value_type &const_reference;
 
 public:
     size_t count(const key_type& key) const
@@ -38,6 +40,19 @@ public:
         map_.insert(make_pair(value.first, pos));
     }
 
+    
+    iterator erase(iterator pos)
+    {
+        map_.erase(pos->first);
+        return list_.erase(pos);
+    }
+
+    reverse_iterator erase(reverse_iterator pos)
+    {
+        map_.erase(pos->first);
+        return list_.erase(pos);
+    }
+    
     size_t erase(const key_type &key)
     {
         const map_it_t map_it = map_.find(key);
@@ -55,6 +70,16 @@ public:
         list_.splice(list_.begin(), list_, it_ref);
         it_ref = list_.begin();
         return it_ref->second;
+    }
+
+    const_iterator find(const key_type &key) const
+    {
+        return map_.at(key);
+    }
+
+    iterator find(const key_type &key)
+    {
+        return map_.at(key);
     }
 
     size_t size() const

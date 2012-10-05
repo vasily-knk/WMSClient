@@ -79,8 +79,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="dumb_cache.h" />
     <ClInclude Include="lru_cache.h" />
+    <ClInclude Include="lru_map.h" />
     <ClInclude Include="png_cache.h" />
     <ClInclude Include="png_converter.h" />
     <ClInclude Include="png_provider.h" />
