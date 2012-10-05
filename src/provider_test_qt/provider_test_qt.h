@@ -23,6 +23,7 @@ private:
     void updateTile();
     void initInterface();
     void updateImage();
+    void updateList();
 
     static inline QString tileIdToString(const tile_id_t &id);
 private:
@@ -38,6 +39,7 @@ private:
     QStringListModel list_model_;
 
     bool tile_requested_;
+    std::stringstream tile_provider_debug_;
 };
 
 #endif // PROVIDER_TEST_QT_H

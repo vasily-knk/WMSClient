@@ -15,6 +15,8 @@ provider_test_qt::provider_test_qt(QWidget *parent, Qt::WFlags flags)
 
     , cache_(new lru_cache(5, 10))
 {
+    provider_.set_debug(tile_provider_debug_);
+    
     shared_ptr<wms_png_provider> wms(new wms_png_provider("192.168.121.129", provider_.io_service()));
     shared_ptr<disk_png_cache> disk_cache(new disk_png_cache("./cache", provider_.io_service()));
 
@@ -101,6 +103,13 @@ void provider_test_qt::keyPressEvent(QKeyEvent *event)
         tilechange = false;
     }
 
+    switch (event->key())
+    {
+    case Qt::Key_Space:
+        updateList();
+        break;
+    }
+ 
     auto bound = [](int &val, const int min, const int max) -> void
     {
         val = std::min(val, max);
@@ -130,15 +139,21 @@ void provider_test_qt::updateTile()
     tile_requested_ = true;
     location_->setText(tileIdToString(id));
 
-    QStringList string_list;
-    //for (auto it = cache_->get_map().get_map().begin(); it != cache_->get_map().get_map().end(); ++it)
-    BOOST_FOREACH(auto &v, cache_->get_map())
-        string_list.push_back(tileIdToString(v.first));
-
-    list_model_.setStringList(string_list);
-
+    qDebug() << tile_provider_debug_.str().c_str();
+    tile_provider_debug_.str(string());
     qDebug() << "Tiles: " << tile_t::get_num_tiles();
 }
+
+
+void provider_test_qt::updateList()
+{
+    QStringList string_list;
+    BOOST_FOREACH(auto &v, cache_->get_map())
+        string_list.push_back(tileIdToString(v.first));
+    list_model_.setStringList(string_list);
+
+}
+
 
 void provider_test_qt::timerTick()
 {
@@ -150,6 +165,7 @@ void provider_test_qt::timerTick()
         setWindowTitle("Done.");
         tile_requested_ = false;
     }
+    updateList();
 }
 
 void provider_test_qt::initInterface()

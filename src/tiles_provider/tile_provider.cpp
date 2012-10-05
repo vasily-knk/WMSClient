@@ -8,6 +8,7 @@ tile_provider::tile_provider()
     : work_(asio_)
     , runner_thread_(boost::bind(&boost::asio::io_service::run, &asio_))
     , converter_(::get_png_converter())
+    , debug_(NULL)
 {
 /*
     shared_ptr<dummy_cache> cache(new dummy_cache);
@@ -43,12 +44,18 @@ shared_ptr<const tile_t> tile_provider::request_tile(const tile_id_t &id)
         tiles_in_progress_[id] = tile;
     }
 
+    debug() << "Requesting tile: " << id.zoom << "_" << id.x << "_" << id.y << endl;
+
 
     for (auto it = loaders_.begin(); it != loaders_.end(); ++it)
     {
+        debug() << "Looking in: " << typeid(**it).name() << endl;
         auto callback = boost::bind(&tile_provider::png_ready_callback, this, id, tile, _1, *it);
         if ((*it)->request_png(id, callback))
+        {
+            debug() << "Found!" << endl;
             break;
+        }
     }
 
     return tile;

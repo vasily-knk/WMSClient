@@ -20,6 +20,22 @@ public:
         return asio_;
     }
 
+public:
+    bool debug_is_set() 
+    {
+        return (debug_ != NULL);
+    }
+
+    std::ostream& debug() 
+    {
+        return *debug_;
+    }
+
+    void set_debug(std::ostream &stream)
+    {
+        debug_ = &stream;
+    }
+
 private:
     void png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> tile, shared_ptr<const png_t> png, shared_ptr<png_provider> source_provider);
 
@@ -33,5 +49,7 @@ private:
     
     unordered_map<tile_id_t, shared_ptr<const tile_t>> tiles_in_progress_;
     boost::mutex tiles_in_progress_mutex_;
+
+    std::ostream *debug_;
 };
 
