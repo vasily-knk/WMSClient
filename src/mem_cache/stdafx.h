@@ -24,3 +24,6 @@ using std::endl;
 #include <algorithm>
 
 #include <boost/foreach.hpp>
+
+using std::pair;
+using std::make_pair;

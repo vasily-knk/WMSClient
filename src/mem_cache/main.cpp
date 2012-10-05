@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "dumb_cache.h"
+#include "lru_map.h"
 
 template<typename T>
 class ordered_generator
@@ -26,14 +27,17 @@ struct my_alloc
 
 int main()
 {
-    dumb_cache<int, int> cache;
+    lru_map<int, int> cache;
     for (int i = 0; i < 10; ++i)
-        cache.add(i, i);
+        cache.insert(make_pair(i, i * i));
 
-    if (cache.contains(5))
-        cache.request(5);
+    cache.request(5);
+    cache.request(3);
 
-    BOOST_FOREACH(int i, cache)
-        cout << i << endl;
+    BOOST_FOREACH(auto &v, cache)
+    {
+        ++v.second;
+        cout << v.first << ": " << v.second << endl;
+    }
     return 0;
 }
