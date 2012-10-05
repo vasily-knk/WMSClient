@@ -45,6 +45,9 @@
     <ClInclude Include="lru_map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="disk_png_cache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -60,6 +63,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lru_cache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="disk_png_cache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

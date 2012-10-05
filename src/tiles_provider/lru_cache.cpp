@@ -20,7 +20,7 @@ void lru_cache::cache_png(const tile_id_t &id, shared_ptr<const png_t> png)
     for (auto it = map_.rbegin(); it != map_.rend() && map_.size() > lower_;)
     {
         auto temp = map_.erase(--it.base());
-        it = png_map_t::reverse_iterator(it);
+        it = png_map_t::reverse_iterator(temp);
     }
 }
 

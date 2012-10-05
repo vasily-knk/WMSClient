@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="disk_png_cache.h" />
     <ClInclude Include="lru_cache.h" />
     <ClInclude Include="lru_map.h" />
     <ClInclude Include="png_cache.h" />
@@ -91,6 +92,7 @@
     <ClInclude Include="wms_png_provider.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="disk_png_cache.cpp" />
     <ClCompile Include="lru_cache.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">

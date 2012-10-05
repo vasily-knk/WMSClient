@@ -27,6 +27,8 @@ tile_provider::~tile_provider()
 
 shared_ptr<const tile_t> tile_provider::request_tile(const tile_id_t &id)
 {
+    // THREAD: client
+
     shared_ptr<tile_t> tile;
     
     // tiles_in_progress_ critical section
@@ -42,22 +44,27 @@ shared_ptr<const tile_t> tile_provider::request_tile(const tile_id_t &id)
     }
 
 
-    BOOST_FOREACH(const provider_cache_pair &p, loaders_)
+    for (auto it = loaders_.begin(); it != loaders_.end(); ++it)
     {
-        auto callback = boost::bind(&tile_provider::png_ready_callback, this, id, tile, _1, p.second);
-        
-        if (p.first->request_png(id, callback))
+        auto callback = boost::bind(&tile_provider::png_ready_callback, this, id, tile, _1, *it);
+        if ((*it)->request_png(id, callback))
             break;
     }
 
     return tile;
 }
 
-void tile_provider::png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> tile, shared_ptr<const png_t> png, shared_ptr<png_cache> cache)
+void tile_provider::png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> tile, shared_ptr<const png_t> png, shared_ptr<png_provider> source_provider)
 {
-    if (cache)
-        cache->cache_png(id, png);
+    // THREAD: service 
 
+    BOOST_FOREACH(shared_ptr<png_provider> p, loaders_)
+    {
+        if (p == source_provider)
+            break;
+        p->cache_png(id, png);
+    }
+    
     converter_(&(png->at(0)), tile->get_data(), png->size(), tile_t::WIDTH, tile_t::HEIGHT);
 
     // tiles_in_progress_ critical section
@@ -69,14 +76,8 @@ void tile_provider::png_ready_callback(const tile_id_t &id, shared_ptr<tile_t> t
     tile->set_ready(true);
 }
 
-void tile_provider::add_provider(shared_ptr<png_provider> provider, shared_ptr<png_cache> cache)
-{
-    loaders_.push_back(make_pair(provider, cache));
-}
-
 void tile_provider::add_provider(shared_ptr<png_provider> provider)
 {
-    shared_ptr<png_cache> cache;
-    add_provider(provider, cache);
+    loaders_.push_back(provider);
 }
 

@@ -47,12 +47,6 @@ public:
         return list_.erase(pos);
     }
 
-    reverse_iterator erase(reverse_iterator pos)
-    {
-        map_.erase(pos->first);
-        return list_.erase(pos);
-    }
-    
     size_t erase(const key_type &key)
     {
         const map_it_t map_it = map_.find(key);

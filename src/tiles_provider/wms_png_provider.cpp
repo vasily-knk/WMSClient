@@ -11,7 +11,6 @@ public:
 
     void start(shared_ptr<wms_png_provider::request> myself);
 
-
 private:
     string get_path() const;
     void error(const boost::system::error_code& err);
@@ -27,13 +26,11 @@ private:
     void process_response();
     void done();
 
-
 private:
     const string host_;
     tile_id_t tile_id_;
     boost::asio::io_service *io_;
     shared_ptr<wms_png_provider::request> myself_;
-
 
 private:
     tcp::resolver resolver_;
@@ -274,9 +271,9 @@ void wms_png_provider::request::done()
 
 
 
-wms_png_provider::wms_png_provider(boost::asio::io_service &io, const string &host)
-    : io_(&io)
-    , host_(host)
+wms_png_provider::wms_png_provider(const string &host, boost::asio::io_service &io)
+    : host_(host)
+    , io_(&io)
 {
 
 }
@@ -289,6 +286,11 @@ bool wms_png_provider::request_png(const tile_id_t &id, const png_callback &call
 
     //callback(shared_ptr<png_t>(new png_t));
     return true;
+}
+
+void wms_png_provider::cache_png(const tile_id_t &id, shared_ptr<const png_t> png)
+{
+    throw std::exception("The method or operation is not implemented.");
 }
 
 

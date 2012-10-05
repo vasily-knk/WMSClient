@@ -1,10 +1,10 @@
 #pragma once
 
-#include "png_cache.h"
 #include "png_provider.h"
+#include "png_cache.h"
 #include "lru_map.h"
 
-class lru_cache : public png_cache, public png_provider
+class lru_cache : public png_provider_cache
 {
 public:
     typedef lru_map<tile_id_t, shared_ptr<const png_t>> png_map_t;

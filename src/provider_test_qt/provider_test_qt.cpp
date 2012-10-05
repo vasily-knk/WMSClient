@@ -2,6 +2,7 @@
 #include "provider_test_qt.h"
 #include "../tiles_provider/lru_cache.h"
 #include "../tiles_provider/wms_png_provider.h"
+#include "../tiles_provider/disk_png_cache.h"
 
 provider_test_qt::provider_test_qt(QWidget *parent, Qt::WFlags flags)
     : QWidget(parent, flags)
@@ -14,11 +15,12 @@ provider_test_qt::provider_test_qt(QWidget *parent, Qt::WFlags flags)
 
     , cache_(new lru_cache(5, 10))
 {
-    shared_ptr<wms_png_provider> wms(new wms_png_provider(provider_.io_service(), "192.168.121.129"));
+    shared_ptr<wms_png_provider> wms(new wms_png_provider("192.168.121.129", provider_.io_service()));
+    shared_ptr<disk_png_cache> disk_cache(new disk_png_cache("./cache", provider_.io_service()));
 
     provider_.add_provider(cache_);
-    provider_.add_provider(wms, cache_);
-    
+    provider_.add_provider(disk_cache);
+    provider_.add_provider(wms);
 
     initInterface();
 
