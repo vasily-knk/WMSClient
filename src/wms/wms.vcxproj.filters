@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\mypng">
+      <UniqueIdentifier>{a1bc5faf-82a1-4b7a-b880-4055651604e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\wms">
+      <UniqueIdentifier>{4f192e27-73f4-4d79-9745-c116c9a1b623}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="png_cache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wms_png_provider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lru_cache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lru_map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="disk_png_cache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mypng\myimage.h">
+      <Filter>Header Files\mypng</Filter>
+    </ClInclude>
+    <ClInclude Include="mypng\mypixbuf.h">
+      <Filter>Header Files\mypng</Filter>
+    </ClInclude>
+    <ClInclude Include="mypng\mypng.h">
+      <Filter>Header Files\mypng</Filter>
+    </ClInclude>
+    <ClInclude Include="wms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wms\tile.h">
+      <Filter>Header Files\wms</Filter>
+    </ClInclude>
+    <ClInclude Include="wms\tile_provider.h">
+      <Filter>Header Files\wms</Filter>
+    </ClInclude>
+    <ClInclude Include="wms\tile_provider_base.h">
+      <Filter>Header Files\wms</Filter>
+    </ClInclude>
+    <ClInclude Include="wms\png_converter.h">
+      <Filter>Header Files\wms</Filter>
+    </ClInclude>
+    <ClInclude Include="wms\png_provider.h">
+      <Filter>Header Files\wms</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wms_png_provider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lru_cache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="disk_png_cache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tile_provider_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tile_provider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng_converter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
