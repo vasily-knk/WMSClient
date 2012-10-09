@@ -91,7 +91,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_provider_test_qt.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="libpng_converter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="provider_test_qt.cpp" />
     <ClCompile Include="qt_png_converter.cpp" />
@@ -111,13 +110,10 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp" "-fStdAfx.h" "-f../../provider_test_qt.h"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui"</Command>
     </CustomBuild>
-    <ClInclude Include="mypng\myimage.h" />
-    <ClInclude Include="mypng\mypixbuf.h" />
-    <ClInclude Include="mypng\mypng.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\tiles_provider\tiles_provider.vcxproj">
+    <ProjectReference Include="..\wms\wms.vcxproj">
       <Project>{3ae4aaa8-4c13-4d33-9ecd-36d98f66f8ea}</Project>
     </ProjectReference>
   </ItemGroup>

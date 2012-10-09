@@ -1,11 +1,14 @@
 #include "stdafx.h"
 #include "provider_test_qt.h"
-#include "../tiles_provider/lru_cache.h"
-#include "../tiles_provider/wms_png_provider.h"
-#include "../tiles_provider/disk_png_cache.h"
+#include "../wms/lru_cache.h"
+#include "../wms/wms_png_provider.h"
+#include "../wms/disk_png_cache.h"
+
+#include "../wms/wms/tile_provider.h"
 
 provider_test_qt::provider_test_qt(QWidget *parent, Qt::WFlags flags)
     : QWidget(parent, flags)
+    , provider_("192.168.121.129", "/cgi-bin/tilecache.cgi", 5, 10)
     , zoom_(0)
     , x_(0)
     , y_(0)
@@ -13,16 +16,18 @@ provider_test_qt::provider_test_qt(QWidget *parent, Qt::WFlags flags)
     , timer_(new QTimer(this))
     , tile_requested_(false)
 
-    , cache_(new lru_cache(5, 10))
+    , cache_(new wms::lru_cache(5, 10))
 {
-    provider_.set_debug(tile_provider_debug_);
+    //provider_.set_debug(tile_provider_debug_);
     
-    shared_ptr<wms_png_provider> wms(new wms_png_provider("192.168.121.129", provider_.io_service()));
+/*
+    shared_ptr<wms_png_provider> wms(new wms_png_provider("192.168.121.129", "/cgi-bin/tilecache.cgi", provider_.io_service()));
     shared_ptr<disk_png_cache> disk_cache(new disk_png_cache("./cache", provider_.io_service()));
 
     provider_.add_provider(cache_);
     provider_.add_provider(disk_cache);
     provider_.add_provider(wms);
+*/
 
     initInterface();
 
@@ -134,22 +139,24 @@ void provider_test_qt::updateTile()
     
     const size_t uses = tile_.use_count();
 
-    tile_id_t id (zoom_, x_, y_);
+    wms::tile_id_t id (zoom_, x_, y_);
     tile_ = provider_.request_tile(id);
     tile_requested_ = true;
     location_->setText(tileIdToString(id));
 
-    qDebug() << tile_provider_debug_.str().c_str();
-    tile_provider_debug_.str(string());
-    qDebug() << "Tiles: " << tile_t::get_num_tiles();
+    //qDebug() << tile_provider_debug_.str().c_str();
+    //tile_provider_debug_.str(string());
+    //qDebug() << "Tiles: " << tile_t::get_num_tiles();
 }
 
 
 void provider_test_qt::updateList()
 {
     QStringList string_list;
+/*
     BOOST_FOREACH(auto &v, cache_->get_map())
         string_list.push_back(tileIdToString(v.first));
+*/
     list_model_.setStringList(string_list);
 
 }
@@ -190,12 +197,12 @@ void provider_test_qt::initInterface()
 
 void provider_test_qt::updateImage()
 {
-    QImage img(tile_t::WIDTH, tile_t::HEIGHT, QImage::Format_ARGB32_Premultiplied);
+    QImage img(wms::tile_t::WIDTH, wms::tile_t::HEIGHT, QImage::Format_ARGB32_Premultiplied);
 
     unsigned char* ptr = tile_->get_data();
-    for (size_t y = 0; y < tile_t::HEIGHT; ++y)
+    for (size_t y = 0; y < wms::tile_t::HEIGHT; ++y)
     {
-        for (size_t x = 0; x < tile_t::WIDTH; ++x)
+        for (size_t x = 0; x < wms::tile_t::WIDTH; ++x)
         {
             const QRgb rgb = qRgb(ptr[0], ptr[1], ptr[2]);
             img.setPixel(x, y, rgb);
@@ -209,7 +216,7 @@ void provider_test_qt::updateImage()
     screen_->setPixmap(pixmap);
 }
 
-QString provider_test_qt::tileIdToString(const tile_id_t &id)
+QString provider_test_qt::tileIdToString(const wms::tile_id_t &id)
 {
     return QString::number(id.zoom) + " (" + QString::number(id.x) + ", " + QString::number(id.y) + ")";
 }

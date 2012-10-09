@@ -24,9 +24,6 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="Header Files\mypng">
-      <UniqueIdentifier>{fe2a1c7a-c6e7-45f1-be16-2f053ca9fab6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -47,22 +44,10 @@
     <ClCompile Include="qt_png_converter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="libpng_converter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mypng\myimage.h">
-      <Filter>Header Files\mypng</Filter>
-    </ClInclude>
-    <ClInclude Include="mypng\mypng.h">
-      <Filter>Header Files\mypng</Filter>
-    </ClInclude>
-    <ClInclude Include="mypng\mypixbuf.h">
-      <Filter>Header Files\mypng</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

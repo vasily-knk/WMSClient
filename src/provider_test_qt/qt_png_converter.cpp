@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "../tiles_provider/png_converter.h"
+#include "../wms/png_converter.h"
 #include "common/performance_counter.h"
 
 void qt_png_converter(const unsigned char* src, unsigned char* dst, const size_t len, const size_t width, const size_t height)
@@ -8,7 +8,7 @@ void qt_png_converter(const unsigned char* src, unsigned char* dst, const size_t
     QImage img(width, height, QImage::Format_ARGB32_Premultiplied);
     PerformaceCounter perf_count;
     bool res = img.loadFromData(src, len);
-    qDebug() << perf_count.time_ms() << " ms";
+    //qDebug() << perf_count.time_ms() << " ms";
 
 /*
     unsigned char* ptr = dst;

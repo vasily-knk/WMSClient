@@ -1,9 +1,8 @@
 #ifndef PROVIDER_TEST_QT_H
 #define PROVIDER_TEST_QT_H
 
-#include "../tiles_provider/tile_provider.h"
-
-class lru_cache;
+#include "../wms/wms/tile_provider.h"
+#include "../wms/lru_cache.h"
 
 class provider_test_qt : public QWidget
 {
@@ -25,11 +24,11 @@ private:
     void updateImage();
     void updateList();
 
-    static inline QString tileIdToString(const tile_id_t &id);
+    static inline QString tileIdToString(const wms::tile_id_t &id);
 private:
-    tile_provider provider_;
-    shared_ptr<const tile_t> tile_;
-    shared_ptr<lru_cache> cache_;
+    wms::tile_provider provider_;
+    shared_ptr<const wms::tile_t> tile_;
+    shared_ptr<wms::lru_cache> cache_;
 
     int zoom_, x_, y_;
 
